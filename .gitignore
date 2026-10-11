@@ -1,0 +1,15 @@
+.dart_tool/
+build/
+.flutter-plugins-dependencies
+.idea/
+*.iml
+.env
+.venv/
+*service-account*.json
+*firebase-adminsdk*.json
+android/local.properties
+*.jks
+*.keystore
+firebase-debug.log
+firestore-debug.log
+node_modules/

@@ -1,0 +1,75 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signed() { return request.auth != null; }
+    function member() { return get(/databases/$(database)/documents/users/$(request.auth.uid)).data; }
+    function active() { return signed() && member().active == true; }
+    function admin() { return active() && member().role == 'admin'; }
+    function validUser(d) {
+      return d.keys().hasAll(['name','email','role','active','title','phone','bio','photo'])
+        && d.keys().hasOnly(['name','email','role','active','title','phone','bio','photo'])
+        && d.name is string && d.name.size() >= 2 && d.name.size() <= 80
+        && d.email is string && d.email.size() <= 254
+        && d.role in ['intern','admin'] && d.active is bool
+        && d.title is string && d.title.size() <= 120
+        && d.phone is string && d.phone.size() <= 30
+        && d.bio is string && d.bio.size() <= 500
+        && d.photo is string && d.photo.size() <= 200000;
+    }
+    match /users/{uid} {
+      allow read: if signed() && (request.auth.uid == uid || admin());
+      allow create: if signed() && request.auth.uid == uid && validUser(request.resource.data)
+        && request.resource.data.role == 'intern' && request.resource.data.active == false
+        && request.resource.data.email == request.auth.token.email;
+      allow update: if signed() && validUser(request.resource.data) && (
+        (request.auth.uid == uid && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['name','title','phone','bio','photo']))
+        || (admin() && request.auth.uid != uid && request.resource.data.diff(resource.data)
+          .affectedKeys().hasOnly(['active'])));
+      allow delete: if false;
+    }
+    function validTask(d) {
+      return d.keys().hasAll(['title','description','assigneeId','createdBy','due','createdAt','updatedAt','status','priority','category','progress','reviewNote'])
+        && d.keys().hasOnly(['title','description','assigneeId','createdBy','due','createdAt','updatedAt','status','priority','category','progress','reviewNote'])
+        && d.title is string && d.title.size() >= 3 && d.title.size() <= 120
+        && d.description is string && d.description.size() > 0 && d.description.size() <= 4000
+        && d.assigneeId is string && d.createdBy is string
+        && d.due is string && d.due.size() <= 40
+        && d.createdAt is string && d.createdAt.size() <= 40
+        && d.updatedAt is string && d.updatedAt.size() <= 40
+        && d.status in ['todo','doing','review','done']
+        && d.priority in ['low','medium','high']
+        && d.category in ['Development','Design','Research','Documentation','Testing','Other']
+        && d.progress is int && d.progress >= 0 && d.progress <= 100
+        && (d.status != 'done' || d.progress == 100)
+        && (d.status != 'todo' || d.progress == 0)
+        && d.reviewNote is string && d.reviewNote.size() <= 1000;
+    }
+    function assigneeActive(d) { return get(/databases/$(database)/documents/users/$(d.assigneeId)).data.active == true; }
+    match /tasks/{taskId} {
+      allow read: if active() && (admin() || resource.data.assigneeId == request.auth.uid);
+      allow create: if active() && validTask(request.resource.data)
+        && assigneeActive(request.resource.data)
+        && request.resource.data.createdBy == request.auth.uid
+        && (admin() || (request.resource.data.assigneeId == request.auth.uid
+          && request.resource.data.reviewNote == ''));
+      allow update: if active() && validTask(request.resource.data)
+        && request.resource.data.createdBy == resource.data.createdBy
+        && request.resource.data.createdAt == resource.data.createdAt
+        && (
+          (admin() && assigneeActive(request.resource.data))
+          || (resource.data.assigneeId == request.auth.uid
+            && request.resource.data.assigneeId == resource.data.assigneeId
+            && (
+              (resource.data.createdBy == request.auth.uid
+                && request.resource.data.reviewNote == resource.data.reviewNote)
+              || (request.resource.data.diff(resource.data).affectedKeys()
+                .hasOnly(['status','progress','updatedAt'])
+                && (request.resource.data.status != 'done' || resource.data.status == 'done'))
+            ))
+        );
+      allow delete: if active() && (admin() ||
+        (resource.data.createdBy == request.auth.uid && resource.data.assigneeId == request.auth.uid));
+    }
+  }
+}

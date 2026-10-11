@@ -1,0 +1,14 @@
+FLOW DESK FRONTEND UPDATE
+
+Copy the included lib folder over your existing project lib folder. Only main.dart, forms.dart and brand.dart are included. Back up your existing main.dart and forms.dart first.
+Firebase configuration, store.dart, models.dart and platform files are not included and must remain in your existing project. Keep assets/logo.png.
+
+Stop running app with q, then run:
+dart format lib
+flutter analyze
+flutter test
+flutter run -d emulator-5554
+
+Use your actual device ID.
+Changes: central brand tile, responsive dashboard metric grid, full-width phone filters, expanded dropdowns, navigation themes, focused input borders, profile avatar framing and constrained email.
+Validation: ZIP integrity checked. Flutter analysis, widget tests and Android build not executed in this environment. No guarantee of zero errors; run the checks above.

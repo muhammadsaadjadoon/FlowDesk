@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1038452043759",
+    "project_id": "flow-desk-31891",
+    "storage_bucket": "flow-desk-31891.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1038452043759:android:560c5ef8aacd70620ed01a",
+        "android_client_info": {
+          "package_name": "com.saadi.flow_desk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1038452043759-lm6784mkrfkfb40hr4mnonfh45sjel8o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0vt5_pS3AiQtCLC8D3aD5dmk44bF6gb8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1038452043759-lm6784mkrfkfb40hr4mnonfh45sjel8o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
