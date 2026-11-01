@@ -47,7 +47,7 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCcwbRLzWSibEPHL8JTT9U8gshpPjNfwbo',
+    apiKey: 'YOUR_API_KEY',
     appId: '1:1038452043759:web:dd1089b955de06450ed01a',
     messagingSenderId: '1038452043759',
     projectId: 'flow-desk-31891',
@@ -57,20 +57,20 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyA0vt5_pS3AiQtCLC8D3aD5dmk44bF6gb8',
+    apiKey: 'YOUR_API_KEY',
     appId: '1:1038452043759:android:560c5ef8aacd70620ed01a',
     messagingSenderId: '1038452043759',
     projectId: 'flow-desk-31891',
     storageBucket: 'flow-desk-31891.firebasestorage.app',
   );
+
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAbRBZ9zBUThg0Vql-P9pHiLY_fa0-dhSg',
-    appId: '1:1038452043759:ios:b9b31a5c134b1ad30ed01a',
+    apiKey: 'YOUR_API_KEY',
+    appId: '1:1038452043759:ios:bb931a5c134b1ad30ed01a',
     messagingSenderId: '1038452043759',
     projectId: 'flow-desk-31891',
     storageBucket: 'flow-desk-31891.firebasestorage.app',
-    iosClientId:
-        '1038452043759-fjavkedogahfogud0cinogpt80k7keaj.apps.googleusercontent.com',
+    iosClientId: '1038452043759-fjavkedogahfogud0cinogpt80k7keaj.apps.googleusercontent.com',
     iosBundleId: 'com.saadi.flowDesk',
   );
 }
